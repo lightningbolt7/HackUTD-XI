@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-file_path = "Valiant.csv"  # Replace with your CSV file path
+file_path = "data/Valiant.csv"  # Replace with your CSV file path
 data = pd.read_csv(file_path)
 
 # Display the first few rows to understand the structure
