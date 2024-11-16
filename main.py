@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the CSV file
-file_path = "data/Valiant.csv"  # Replace with your CSV file path
+pipe_name = "Bold"
+file_path = "data/initial/" + pipe_name + ".csv"  # Replace with your CSV file path
 data = pd.read_csv(file_path)
 
 # Display the first few rows to understand the structure
@@ -31,7 +32,7 @@ data['Likelihood of Hydrate'] = 100 * (data['Rolling Std'] - min_std) / (max_std
 data['Likelihood of Hydrate'] = data['Likelihood of Hydrate'].fillna(0)
 
 # Save the cleaned and final data to a CSV file
-data.to_csv("finalValiant.csv", index=False)  # Save the final DataFrame to "final.csv"
+data.to_csv("data/final/" + pipe_name + ".csv", index=False)  # Save the final DataFrame to "final.csv"
 
 # Check cleaned data with the new column
 print("Cleaned Data with 'Likelihood of Hydrate':")
