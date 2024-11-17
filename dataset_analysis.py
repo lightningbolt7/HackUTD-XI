@@ -15,7 +15,11 @@ if 'Time' in data.columns:
     data['Time'] = pd.to_datetime(data['Time'], errors='coerce')  # Handle invalid dates
 
 # Fill missing values
-data = data.fillna(method='ffill')  # Forward-fill missing values
+# First, apply backward fill to handle the top rows with NaN values
+data = data.bfill(axis=0)
+
+# Then, apply forward fill to handle the rest of the missing data
+data = data.fillna(method='ffill')  # Forward-fill remaining missing values
 
 # Calculate the rolling standard deviation for the Gas Meter Volume Instantaneous
 window_size = 20  # You can adjust the window size based on your data

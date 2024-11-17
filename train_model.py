@@ -1,34 +1,62 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import joblib
 
-# Initialize the model
-model = RandomForestRegressor(random_state=42, n_estimators=100)
+# Load the combined dataset
+file_path = "combined_dataset.csv"  # Ensure this file exists
+data = pd.read_csv(file_path)
 
-# Train the model
+# Ensure 'Time' column is in datetime format and extract features
+data['Time'] = pd.to_datetime(data['Time'], errors='coerce')
+data['Hour'] = data['Time'].dt.hour
+data['Day'] = data['Time'].dt.day
+data['Month'] = data['Time'].dt.month
+data['Minute'] = data['Time'].dt.minute
+
+# Define features and target
+X = data[['Hour', 'Day', 'Month', 'Minute',
+          'Inj Gas Meter Volume Instantaneous',
+          'Inj Gas Meter Volume Setpoint',
+          'Inj Gas Valve Percent Open']]
+y = data['Likelihood of Hydrate']
+
+# Normalize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Split into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Train the Random Forest Regressor
+model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# Make predictions
-y_pred_train = model.predict(X_train)
-y_pred_test = model.predict(X_test)
+# Evaluate the model
+y_pred = model.predict(X_test)
 
-# Evaluate the model on training data
-print("Training Performance:")
-print(f"Mean Absolute Error (MAE): {mean_absolute_error(y_train, y_pred_train):.2f}")
-print(f"Mean Squared Error (MSE): {mean_squared_error(y_train, y_pred_train):.2f}")
-print(f"R² Score: {r2_score(y_train, y_pred_train):.2f}")
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
 
-# Evaluate the model on testing data
-print("\nTesting Performance:")
-print(f"Mean Absolute Error (MAE): {mean_absolute_error(y_test, y_pred_test):.2f}")
-print(f"Mean Squared Error (MSE): {mean_squared_error(y_test, y_pred_test):.2f}")
-print(f"R² Score: {r2_score(y_test, y_pred_test):.2f}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"R² Score: {r2}")
 
-# Feature importance
+# Feature importances
 feature_importances = model.feature_importances_
 features = ['Hour', 'Day', 'Month', 'Minute',
             'Inj Gas Meter Volume Instantaneous',
             'Inj Gas Meter Volume Setpoint',
             'Inj Gas Valve Percent Open']
-print("\nFeature Importances:")
+
+print("Feature Importances:")
 for feature, importance in zip(features, feature_importances):
     print(f"{feature}: {importance:.4f}")
+
+# Save the trained model
+joblib.dump(model, "random_forest_hydrate_model.pkl")
+print("Model saved as random_forest_hydrate_model.pkl")
