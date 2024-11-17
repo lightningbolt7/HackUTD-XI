@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bold Pipe Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-black p-4 shadow-lg">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="text-white text-xl font-bold">EOG Pipeline Monitor</div>
+                <button class="text-white text-xl font-bold">
+                    <a href="index.html">Back to Pipelines</a>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pipe Details Content -->
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Bold Pipe</h1>
+
+        <!-- Pipe Status -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-4">Current Status</h2>
+            <div class="relative h-24 w-full mb-4">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="h-16 w-full bg-gradient-to-r from-blue-200 via-blue-300 to-blue-200 rounded-full shadow-inner border-2 border-blue-400"></div>
+                </div>
+                <div class="absolute inset-0 flex items-center overflow-hidden" style="clip-path: inset(0 60% 0 0)">
+                    <div class="h-12 w-full flex justify-around items-center">
+                        <!-- Example Pulse Animation to Represent Flow -->
+                        ${[...Array(20)].map((_, i) => `
+                            <div class="h-8 w-2 bg-blue-600 rounded-full transform -rotate-45 animate-pulse" style="animation-delay: ${i * 0.1}s"></div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">Flow Rate</div>
+                    <div class="text-lg font-bold">85%</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">Pressure</div>
+                    <div class="text-lg font-bold">350 PSI</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">Temperature</div>
+                    <div class="text-lg font-bold">110°F</div>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="text-sm text-gray-600 mb-1">Target Flow</div>
+                    <div class="text-lg font-bold">90%</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
