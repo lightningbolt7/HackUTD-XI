@@ -167,9 +167,33 @@
             color: #718096;
             margin-top: 0.25rem;
         }
+
+        /* Home button styles */
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            z-index: 10; /* Ensure it's above other content */
+        }
+
+        .home-btn:hover {
+            background-color: #3182ce;
+        }
     </style>
 </head>
 <body>
+    <!-- Home Button -->
+    <button id="homeBtn" class="home-btn">Go to Home</button>
+
     <div class="container">
         <!-- Login Form -->
         <div class="login-form">
@@ -237,7 +261,7 @@
     </div>
 
     <script>
-        // Firebase configuration
+        // Firebase config and initialization
         const firebaseConfig = {
             apiKey: "AIzaSyAkCi8D5IjPvTABC8Wgt0jzJz7aDqha3uc",
             authDomain: "pipebrains-bf9e6.firebaseapp.com",
@@ -247,7 +271,6 @@
             appId: "1:1056145755792:web:a6d4a3c2be19e72ad69215"
         };
         
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
@@ -271,8 +294,7 @@
 
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Redirect or handle successful login
-                    window.location.href = 'main.html'; // Redirect after login
+                    window.location.href = 'main.html';
                 })
                 .catch((error) => {
                     errorElement.style.display = 'block';
@@ -283,23 +305,16 @@
         // Google Login
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            console.log("Attempting Google sign-in...");
-        
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log("Google sign-in successful", result.user);
-                    // Redirect to your main page after successful login
                     window.location.href = 'main.html';
                 })
                 .catch((error) => {
-                    console.error("Google sign-in error", error);
                     const errorMessage = document.getElementById('loginError');
                     errorMessage.style.display = 'block';
                     errorMessage.textContent = 'Google sign-in failed. Please try again.';
                 });
         }
-        
-        
 
         // Register a new user
         document.getElementById('registerForm').addEventListener('submit', (e) => {
@@ -310,13 +325,17 @@
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Redirect after successful registration
                     window.location.href = 'index.html';
                 })
                 .catch((error) => {
                     errorElement.style.display = 'block';
                     errorElement.textContent = 'Error creating account. Please try again.';
                 });
+        });
+
+        // Navigate to index.html on home button click
+        document.getElementById('homeBtn').addEventListener('click', function() {
+            window.location.href = 'index.html'; // Redirect to index.html
         });
     </script>
 </body>
