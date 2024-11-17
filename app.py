@@ -149,5 +149,44 @@ def convert_file():
     return jsonify(result)
 
 
+@app.route('/get_highly_likely_alerts', methods=['GET'])
+def get_highly_likely_alerts():
+    result = []
+
+    # Open the CSV file and read its contents
+    with open('final_prediction.csv', mode='r') as file:
+        csv_reader = csv.DictReader(file)  # This ensures that each row is a dictionary
+
+        # Iterate through the rows in the CSV file
+        for row in csv_reader:
+            # Check if row is a dictionary and contains the expected keys
+            if isinstance(row, dict):
+                time = row.get('Time')  # Access dictionary key using 'get'
+                likelihood_str = row.get('Predicted Likelihood of Hydrate')
+
+                try:
+                    # Convert the likelihood to float
+                    likelihood = float(likelihood_str)
+                except ValueError:
+                    # Handle potential errors in conversion (e.g., empty or malformed fields)
+                    continue  # Skip this row if conversion fails
+
+                # Determine status based on likelihood
+                if likelihood > 75:
+                    status = "highly likely"
+                else:
+                    continue  # Skip anything that's not highly likely
+
+                # Append the entry to the result list
+                result.append({
+                    'time': time,
+                    'likelihood': likelihood,
+                    'status': status
+                })
+
+    # Return the results as a JSON response
+    return jsonify(result)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5502)

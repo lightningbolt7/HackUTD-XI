@@ -35,7 +35,7 @@
         }
 
         .header a {
-            color: #ffeb3b;
+            color: white;
             text-decoration: none;
             font-weight: bold;
         }
@@ -207,7 +207,7 @@
     </div>
 
     <div class="status-bar">
-        <div>Active Monitoring: <strong>24 Wells</strong></div>
+        <div>Active Monitoring: <strong>EOG Wells</strong></div>
         <div class="alert-count">3 Active Alerts</div>
     </div>
 
@@ -225,24 +225,15 @@
     <script>
         // Sample data structure for alerts
         let alerts = new Map();
+        let pipes = JSON.parse(localStorage.getItem('pipes')) || [];
 
         // Function to add a new alert for a well
-        function addAlert(wellName, gasVolume) {
-            const timestamp = new Date().toLocaleString('en-US', {
-                month: '2-digit',
-                day: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            });
+        function addAlert(wellName, Likelihood, Time) {
 
-            if (!alerts.has(wellName) && gasVolume === 0) {
-                alerts.set(wellName, { timestamp, gasVolume });
-                updateAlertsList();
-                updateAlertCount();
-            }
+
+           alerts.set(wellName, { T, Likelihood });
+            updateAlertsList();
+            updateAlertCount();
         }
 
         // Function to acknowledge an alert
@@ -273,10 +264,10 @@
                         <div class="alert-title">Hydrate Formation Detected</div>
                         <div class="alert-details">
                             Well: ${wellName}<br>
-                            Gas Volume: ${alert.gasVolume} MCF/d
+
                         </div>
                     </div>
-                    <div class="alert-time">${alert.timestamp}</div>
+                    <div class="alert-time">${alert.T}</div>
                     <div class="alert-actions">
                         <button class="btn btn-acknowledge" onclick="acknowledgeAlert('${wellName}')">
                             Acknowledge
@@ -289,33 +280,47 @@
         // Function to update the alert count
         function updateAlertCount() {
             const alertCount = document.querySelector('.alert-count');
-            alertCount.textContent = `${alerts.size} Active Alert${alerts.size !== 1 ? 's' : ''}`;
+            alertCount.textContent = `${alerts.size} Active Alerts`;
         }
 
-        // Function to simulate receiving a signal
-        function monitorSignals() {
-            // Simulate well data
-            const wellData = [
-                { wellName: "Well-A23", gasVolume: Math.round(Math.random() * 1) },
-                { wellName: "Well-B15", gasVolume: Math.round(Math.random() * 1) },
-                { wellName: "Well-C07", gasVolume: Math.round(Math.random() * 1) },
-                { wellName: "Well-D42", gasVolume: Math.round(Math.random() * 1) },
-            ];
+        // Function to monitor signals and add alerts if needed
+        // Function to monitor signals and add alerts if needed
+// Function to monitor signals and add alerts if needed
+function monitorSignals() {
+    // Check if pipes is an array and contains objects
+    if (!Array.isArray(pipes)) {
+        console.error("pipes is not an array");
+        return;
+    }
 
-            wellData.forEach(({ wellName, gasVolume }) => {
-                if (gasVolume === 0) {
-                    addAlert(wellName, gasVolume);
-                }
-            });
+    for (let i = 0; i < pipes.length; i++) {
+        let flag = 0
+        for(let j = 0;j< pipes[i].data.length;j++){
+           W = pipes[i].data[j]['likelihood']
+            T = pipes[i].data[j]['time']
+            if(W > 70){
+                addAlert(pipes[i]["name"], W,T)
+                flag = 1
+                pipes[i].data[j]['likelihood'] = 0
+                break
+            }
 
-            // Simulate receiving signals periodically
-            setTimeout(monitorSignals, 3000); // Adjust interval as needed
+
+
         }
+          if(flag===1){
+                break;
+            }
+    }
 
-        // Initialize with an empty alerts list
-        updateAlertsList();
+    // Save the updated pipes back to localStorage
 
-        // Start monitoring signals
+    setTimeout(monitorSignals, 1000);
+}
+
+
+
+        // Example call to monitor signals
         monitorSignals();
     </script>
 </body>
