@@ -8,7 +8,6 @@
 </head>
 <body class="min-h-screen bg-gray-100">
 
-    <!-- Navigation Bar -->
     <nav class="bg-black p-4 shadow-lg">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-4">
@@ -20,11 +19,9 @@
         </div>
     </nav>
 
-    <!-- Pipe Details Content -->
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Bold Pipe</h1>
 
-        <!-- Pipe Status -->
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Current Status</h2>
             <div class="relative h-24 w-full mb-4">
@@ -33,7 +30,6 @@
                 </div>
                 <div class="absolute inset-0 flex items-center overflow-hidden" style="clip-path: inset(0 60% 0 0)">
                     <div class="h-12 w-full flex justify-around items-center">
-                        <!-- Example Pulse Animation to Represent Flow -->
                         ${[...Array(20)].map((_, i) => `
                             <div class="h-8 w-2 bg-blue-600 rounded-full transform -rotate-45 animate-pulse" style="animation-delay: ${i * 0.1}s"></div>
                         `).join('')}

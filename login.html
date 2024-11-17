@@ -157,7 +157,6 @@
             display: none;
         }
 
-        /* Register form specific styles */
         .register-form {
             display: none;
         }
@@ -171,7 +170,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Login Form -->
         <div class="login-form">
             <div class="header">
                 <h1>Welcome Back</h1>
@@ -207,7 +205,6 @@
             </div>
         </div>
 
-        <!-- Register Form -->
         <div class="register-form">
             <div class="header">
                 <h1>Create Account</h1>
@@ -237,7 +234,6 @@
     </div>
 
     <script>
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAkCi8D5IjPvTABC8Wgt0jzJz7aDqha3uc",
             authDomain: "pipebrains-bf9e6.firebaseapp.com",
@@ -247,11 +243,9 @@
             appId: "1:1056145755792:web:a6d4a3c2be19e72ad69215"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // Show/Hide forms
         function showRegisterForm() {
             document.querySelector('.login-form').style.display = 'none';
             document.querySelector('.register-form').style.display = 'block';
@@ -262,7 +256,6 @@
             document.querySelector('.register-form').style.display = 'none';
         }
 
-        // Email/Password Login
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -271,8 +264,7 @@
 
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Redirect or handle successful login
-                    window.location.href = 'main.html'; // Redirect after login
+                    window.location.href = 'main.html';
                 })
                 .catch((error) => {
                     errorElement.style.display = 'block';
@@ -280,7 +272,6 @@
                 });
         });
 
-        // Google Login
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             console.log("Attempting Google sign-in...");
@@ -288,7 +279,6 @@
             auth.signInWithPopup(provider)
                 .then((result) => {
                     console.log("Google sign-in successful", result.user);
-                    // Redirect to your main page after successful login
                     window.location.href = 'main.html';
                 })
                 .catch((error) => {
@@ -301,7 +291,6 @@
 
 
 
-        // Register a new user
         document.getElementById('registerForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('registerEmail').value;
@@ -310,7 +299,6 @@
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Redirect after successful registration
                     window.location.href = 'index.html';
                 })
                 .catch((error) => {

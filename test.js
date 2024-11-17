@@ -1,6 +1,5 @@
 async function getPredictions() {
     try {
-        // URL of the backend endpoint
         const response = await fetch('http://127.0.0.1:5000/prediction', {
             method: 'GET',
         });
@@ -9,10 +8,9 @@ async function getPredictions() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const result = await response.text(); // Receive response from backend
-        console.log(result); // e.g., "Predictions saved to PredictionResults.csv"
+        const result = await response.text();
+        console.log(result);
 
-        // Display a message to the user
         alert('Predictions completed! Check the CSV file on the server.');
     } catch (error) {
         console.error('Error fetching predictions:', error);
@@ -20,5 +18,4 @@ async function getPredictions() {
     }
 }
 
-// Example button click to trigger prediction
 document.getElementById('predictButton').addEventListener('click', getPredictions);

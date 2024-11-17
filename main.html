@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Monitor</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="min-h-screen bg-gray-100">
-    <!-- Navigation Bar -->
     <nav class="bg-black p-4 shadow-lg">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-4">
@@ -25,7 +23,6 @@
         </div>
     </nav>
 
-    <!-- Pipeline Adding Form -->
     <div class="container mx-auto p-6">
         <h2 class="text-2xl font-bold mb-4">Add New Pipeline</h2>
         <form id="add-pipeline-form" class="space-y-4">
@@ -41,27 +38,22 @@
         </form>
     </div>
 
-    <!-- Main Content -->
     <div class="container mx-auto p-6" id="main-view">
         <h1 class="text-3xl font-bold mb-6">Pipelines</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="pipeline-cards"></div>
     </div>
 
-    <!-- Details View -->
     <div class="hidden container mx-auto p-6" id="details-view">
         <button class="mb-4 bg-blue-500 text-white py-2 px-4 rounded" onclick="goBack()">Back</button>
         <div class="bg-white rounded-lg shadow-lg p-6" id="details-card"></div>
-        <!-- Chart.js Canvas -->
         <div class="mt-8">
             <canvas id="pipelineChart"></canvas>
         </div>
     </div>
 
     <script>
-        // Load the saved pipelines from localStorage
         const pipes = JSON.parse(localStorage.getItem('pipes')) || [];
 
-        // Function to render the list of pipelines
         function renderPipelineCards() {
             console.log(pipes)
             const container = document.getElementById('pipeline-cards');
@@ -98,7 +90,6 @@
             });
         }
 
-        // Function to show details of a selected pipe
         async function showDetails(index) {
             const pipe = pipes[index];
             const detailsCard = document.getElementById('details-card');
@@ -117,26 +108,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600 mb-1">Flow Rate</div>
-                    <div class="text-lg font-bold">${pipe.currentFlow}%</div>
-                </div>
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600 mb-1">Target Flow</div>
-                    <div class="text-lg font-bold">${pipe.targetFlow}%</div>
-                </div>
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600 mb-1">Pressure</div>
-                    <div class="text-lg font-bold">${pipe.pressure} PSI</div>
-                </div>
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <div class="text-sm text-gray-600 mb-1">Temperature</div>
-                    <div class="text-lg font-bold">${pipe.temp}°F</div>
-                </div>
             `;
 
-            // Plot the chart with time and likelihood data
             plotChart(pipe.data);
 
             document.getElementById('main-view').classList.add('hidden');
@@ -149,16 +122,13 @@
             const canvas = document.getElementById('pipelineChart');
             const ctx = canvas.getContext('2d');
 
-            // Destroy the previous chart instance if it exists
             if (pipelineChartInstance) {
                 pipelineChartInstance.destroy();
             }
 
-            // Extract time and likelihood from the data
-            const time = data.map(entry => entry.time);  // Time values
-            const likelihood = data.map(entry => entry.likelihood);  // Likelihood values
+            const time = data.map(entry => entry.time);
+            const likelihood = data.map(entry => entry.likelihood);
 
-            // Create a new chart
             pipelineChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -173,13 +143,11 @@
             });
         }
 
-        // Go back to the main view
         function goBack() {
             document.getElementById('main-view').classList.remove('hidden');
             document.getElementById('details-view').classList.add('hidden');
         }
 
-        // Event listener for adding a new pipeline
         document.getElementById('add-pipeline-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
@@ -228,7 +196,6 @@
 
                 pipes.push(newPipe);
 
-                // Save the updated pipes array to localStorage
                 localStorage.setItem('pipes', JSON.stringify(pipes));
 
                 renderPipelineCards();
@@ -242,7 +209,6 @@
             }
         });
 
-        // Render pipeline cards on page load
         renderPipelineCards();
     </script>
 </body>

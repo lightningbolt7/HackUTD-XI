@@ -5,26 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hydrate Formation Alert System</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(120deg, #f3f4f7, #e3e6ef);
-            margin: 0;
-            padding: 0px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3f4f7, #e3e6ef);
             color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .header {
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            background-color: #2b3d4f;
+            background: linear-gradient(to right, #1a2a3a, #2b3d4f);
             color: white;
-            padding: 1rem 2rem;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -32,98 +41,110 @@
 
         .header h1 {
             font-size: 1.8rem;
+            font-weight: 600;
         }
 
-        .header a {
-            color: white;
+        .nav-link {
+            display: inline-block;
+            color: #ffffff;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 500;
+            background: #4fa3e8;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #1976d2;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            color: #ffffff;
         }
 
         .status-bar {
-            background: #ffffff;
-            padding: 1.2rem;
+            background: white;
             border-radius: 10px;
-            margin: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin: 20px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .alert-count {
             background: #e53935;
             color: white;
             padding: 0.5rem 1rem;
-            border-radius: 15px;
+            border-radius: 20px;
             font-size: 0.9rem;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .alerts-container {
-            background: #ffffff;
-            margin: 20px;
+            background: white;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .alerts-header {
-            background: linear-gradient(to bottom, #4fa3e8, #2b3d4f);
+            background: linear-gradient(to right, #4fa3e8, #2b3d4f);
             color: white;
-            padding: 1.2rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to bottom, #4fa3e8, #2b3d4f);
         }
 
         .alerts-header h2 {
             font-size: 1.5rem;
+            font-weight: 600;
         }
 
-        .alerts-header button {
-            background: #ffeb3b;
-            color: #333;
-            padding: 0.7rem 1rem;
+        .btn {
+            padding: 0.6rem 1rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        .alerts-header button:hover {
-            background: #ffd600;
+        .btn-primary {
+            background: #ffeb3b;
+            color: #333;
+        }
+
+        .btn-primary:hover {
+            background: #fdd835;
+            transform: translateY(-2px);
         }
 
         .alerts-list {
-            max-height: calc(100vh - 300px);
+            max-height: calc(100vh - 250px);
             overflow-y: auto;
             padding: 1rem;
         }
 
         .alert-item {
             background: #f9f9f9;
-            padding: 1rem;
-            border: 1px solid #ddd;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            border-left: 5px solid #e53935;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .alert-item:hover {
-            background-color: #f0f4ff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .alert-item.critical {
-            border-left: 5px solid #e53935;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .alert-info {
@@ -131,9 +152,15 @@
         }
 
         .alert-title {
-            font-weight: bold;
+            font-weight: 600;
             color: #d32f2f;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-title i {
+            margin-right: 0.5rem;
         }
 
         .alert-details {
@@ -144,44 +171,37 @@
         .alert-time {
             color: #999;
             font-size: 0.85rem;
-            white-space: nowrap;
-            margin-left: 1rem;
-        }
-
-        .alert-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 0.5rem;
         }
 
         .btn-acknowledge {
             background: #e3f2fd;
             color: #1976d2;
+            display: flex;
+            align-items: center;
         }
 
         .btn-acknowledge:hover {
             background: #bbdefb;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
+        .btn-acknowledge i {
+            margin-right: 0.5rem;
         }
 
         .no-alerts {
-            padding: 2rem;
             text-align: center;
+            padding: 2rem;
             color: #888;
+            font-size: 1.1rem;
         }
 
-        /* Custom scrollbar */
+        .no-alerts i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bbb;
+        }
+
         .alerts-list::-webkit-scrollbar {
             width: 8px;
         }
@@ -198,36 +218,48 @@
         .alerts-list::-webkit-scrollbar-thumb:hover {
             background: #666;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-item {
+            animation: fadeIn 0.5s ease-out;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>EOG Hydrate Formation Alert System</h1>
-        <h3><a href="main.html">Pipes</a></h3>
-    </div>
-
-    <div class="status-bar">
-        <div>Active Monitoring: <strong>EOG Wells</strong></div>
-        <div class="alert-count">3 Active Alerts</div>
-    </div>
-
-    <div class="alerts-container">
-        <div class="alerts-header">
-            <h2>Active Alerts</h2>
-            <button onclick="acknowledgeAll()">Acknowledge All</button>
-        </div>
-        <div class="alerts-list" id="alertsList">
-            <!-- Alerts will be dynamically inserted here -->
+        <div class="container">
+            <h1>EOG Hydrate Formation Alert System</h1>
+            <a href="main.html" class="nav-link">Back to Pipes</a>
         </div>
     </div>
+
+    <main class="container">
+        <div class="status-bar">
+            <div>Active Monitoring: <strong>EOG Wells</strong></div>
+            <div class="alert-count" id="alertCount">0 Active Alerts</div>
+        </div>
+
+        <div class="alerts-container">
+            <div class="alerts-header">
+                <h2>Active Alerts</h2>
+                <button id="acknowledgeAllBtn" class="btn btn-primary">Acknowledge All</button>
+            </div>
+            <div class="alerts-list" id="alertsList">
+            </div>
+        </div>
+    </main>
 
 
     <script>
-        // Sample data structure for alerts
+
         let alerts = new Map();
         let pipes = JSON.parse(localStorage.getItem('pipes')) || [];
 
-        // Function to add a new alert for a well
+
         function addAlert(wellName, Likelihood, Time) {
 
 
@@ -236,21 +268,21 @@
             updateAlertCount();
         }
 
-        // Function to acknowledge an alert
+
         function acknowledgeAlert(wellName) {
             alerts.delete(wellName);
             updateAlertsList();
             updateAlertCount();
         }
 
-        // Function to acknowledge all alerts
+
         function acknowledgeAll() {
             alerts.clear();
             updateAlertsList();
             updateAlertCount();
         }
 
-        // Function to update the alerts list in the DOM
+
         function updateAlertsList() {
             const alertsList = document.getElementById('alertsList');
             if (alerts.size === 0) {
@@ -277,17 +309,15 @@
             `).join('');
         }
 
-        // Function to update the alert count
+
         function updateAlertCount() {
             const alertCount = document.querySelector('.alert-count');
             alertCount.textContent = `${alerts.size} Active Alerts`;
         }
 
-        // Function to monitor signals and add alerts if needed
-        // Function to monitor signals and add alerts if needed
-// Function to monitor signals and add alerts if needed
+
 function monitorSignals() {
-    // Check if pipes is an array and contains objects
+
     if (!Array.isArray(pipes)) {
         console.error("pipes is not an array");
         return;
@@ -313,14 +343,12 @@ function monitorSignals() {
             }
     }
 
-    // Save the updated pipes back to localStorage
 
     setTimeout(monitorSignals, 1000);
 }
 
 
 
-        // Example call to monitor signals
         monitorSignals();
     </script>
 </body>
