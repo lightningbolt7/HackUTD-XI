@@ -239,9 +239,23 @@
 
     <main class="container">
         <div class="status-bar">
-            <div>Active Monitoring: <strong>EOG Wells</strong></div>
-            <div class="alert-count" id="alertCount">0 Active Alerts</div>
+        <div>Active Monitoring: <strong>EOG Wells</strong></div>
+    <div>
+        <input type="email" id="emailInput" placeholder="Enter your email" style="padding: 5px; border: 1px solid #ccc;">
+        <button onclick="saveEmail()" style="padding: 5px 10px; margin-left: 5px;">Set Email</button>
+    </div>
+    <div class="alert-count">3 Active Alerts</div>
+    </div>
+
+    <div class="alerts-container">
+        <div class="alerts-header">
+            <h2>Active Alerts</h2>
+            <button onclick="acknowledgeAll()">Acknowledge All</button>
         </div>
+        <div class="alerts-list" id="alertsList">
+            <!-- Alerts will be dynamically inserted here -->
+        </div>
+    </div>
 
         <div class="alerts-container">
             <div class="alerts-header">
@@ -258,10 +272,56 @@
 
         let alerts = new Map();
         let pipes = JSON.parse(localStorage.getItem('pipes')) || [];
+        let emailSent = 0;
+
+        // Save user email to localStorage
+function saveEmail() {
+    const emailInput = document.getElementById('emailInput').value;
+    if (emailInput) {
+        localStorage.setItem('userEmail', emailInput);
+        alert('Email saved successfully!');
+    } else {
+        alert('Please enter a valid email.');
+    }
+}
+
+// Function to send an email alert
+function sendEmailAlert(wellName, likelihood, time) {
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+        console.warn("No email is set. Please set an email first.");
+        return;
+    }
+
+    // Make a POST request to your server to send the email
+    fetch('http://localhost:3000/send-email', { // Correct server endpoint
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            to: userEmail,
+            subject: `Hydrate Formation Alert: ${wellName}`,
+            text: `Alert: Hydrate formation detected at ${wellName}.
+        Likelihood: ${likelihood}%
+        Time: ${time}`,
+        }),
+    })
+        .then(response => response.json())
+
+        .then(data => {
+            console.log('Email sent successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error sending email:', error);
+        });
+}
 
 
         function addAlert(wellName, Likelihood, Time) {
-
+            if(emailSent === 0){
+                sendEmailAlert(wellName, Likelihood, Time);
+            }
 
            alerts.set(wellName, { T, Likelihood });
             updateAlertsList();
